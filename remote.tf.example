@@ -1,0 +1,9 @@
+################################################################################
+# remote state
+# see https://www.terraform.io/docs/backends/types/terraform-enterprise.html 
+terraform {
+  backend "atlas" {
+    name = "<org>/<workspace>"
+    address = "https://app.terraform.io"
+  }
+}

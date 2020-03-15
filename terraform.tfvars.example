@@ -1,0 +1,12 @@
+domain                   = "example.com"
+hostname                 = "vault"
+common_name              = "vault.example.com"
+
+dns_challenge_provider   = "cloudflare"
+email_address            = "ykhemani@example.com"
+
+owner                    = "ykhemani"
+vpc_name                 = "example-vpc"
+subnet_ids               = ["subnet-01234567890abcdef"]
+ssh_key_name             = "ykhemani_2020"
+ssh_public_key           = "ssh-rsa abcdefghiklmnopqrstvxyzABCDEFGHIKLMNOPQRSTVXYZ01234567890"
