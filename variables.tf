@@ -64,7 +64,8 @@ variable "ssh_public_key" {
 
 variable "vault_license" {
   type        = string
-  description = "Vault Enterprise license key."
+  description = "Vault Enterprise license key. Set if you want to install a license."
+  default     = ""
 }
 
 # pki stuff

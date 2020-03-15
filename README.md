@@ -2,7 +2,7 @@
 
 This [Terraform](https://terraform.io) configuration allows you to provision an [Ubuntu](https://ubuntu.com) server on an ec2 instance running in [AWS](https://aws.amazon.com/).
 
-The provisioned instance comes up with [HashiCorp](https://hashicorp.com) [Vault](https://vaultproject.io) Enterprise initialized and licensed, fully unattended. Vault is configured with [integrated Raft storage](https://www.vaultproject.io/docs/configuration/storage/raft/) and uses [AWS KMS Seal](https://www.vaultproject.io/docs/configuration/seal/awskms/).
+The provisioned instance comes up with [HashiCorp](https://hashicorp.com) [Vault](https://vaultproject.io) Enterprise initialized and licensed, when a Vault license is specififed. This happens fully unattended. Vault is configured with [integrated Raft storage](https://www.vaultproject.io/docs/configuration/storage/raft/) and uses [AWS KMS Seal](https://www.vaultproject.io/docs/configuration/seal/awskms/).
 
 A DNS record is provisioned in [Cloudflare](https://www.cloudflare.com/), but the configuration can be adapted to create DNS records with other DNS providers.
 
@@ -18,7 +18,7 @@ Do NOT use this Terraform configuration in production. When Vault is initialized
 The Terraform code requires you to define the following environment variables.
 
 * `ATLAS_TOKEN` is your Terraform Cloud API token. You can generate this by going to https://app.terraform.io/app/settings/tokens.
-* `VAULT_LICENSE` is the text of your Vault Enterprise license.
+* `VAULT_LICENSE`, if specified with the text of your Vault Enterprise license, installs that license.
 * `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` are your AWS credentials.
 * `CF_API_EMAIL`, `CLOUDFLARE_EMAIL` and `CLOUDFLARE_API_KEY` are your Cloudflare credentials. The reason that we define the Clouldflare email address using two different variables is because `CF_API_EMAIL` is required for the [ACME provider](https://www.terraform.io/docs/providers/acme/dns_providers/cloudflare.html) and `CLOUDFLARE_EMAIL` is required by the [Clouldflare provider](https://www.terraform.io/docs/providers/cloudflare/index.html). You can generate a Cloudflare API key by logging into your Cloudflare account, clicking on *My Profile* in the menu on the top right, and then selecting API Tokens.
 
@@ -34,7 +34,7 @@ The [Terraform settings](https://www.terraform.io/docs/configuration/terraform.h
 This Terraform code builds upon a HashiStack Amazon Machine Image, which can be created using [ykhemani/packer-hashistack](https://github.com/ykhemani/packer-hashistack).
 
 ## Running this Terraform code
-There is a [tf.sh.example](tf.sh.example) script that sets the aforementioned environment variables and the `owner_ip` and `vault_license` Terraform variables. The sensitive variables are set in our example by pulling the values from [LastPass](https://www.lastpass.com/) using the [LastPass CLI](https://github.com/lastpass/lastpass-cli). You can make a copy of this script and save it as `tf.sh`, and customize it to pull from your LastPass account or set these environment variables any way you like, but please don't store them in plain text and please do NOT check them into GitHub or other VCS provider, be it public or privately hosted.
+There is a [tf.sh.example](tf.sh.example) script that sets the aforementioned environment variables and the `owner_ip` and optionally the `vault_license` Terraform variables. The sensitive variables are set in our example by pulling the values from [LastPass](https://www.lastpass.com/) using the [LastPass CLI](https://github.com/lastpass/lastpass-cli). You can make a copy of this script and save it as `tf.sh`, and customize it to pull from your LastPass account or set these environment variables any way you like, but please don't store them in plain text and please do NOT check them into GitHub or other VCS provider, be it public or privately hosted.
 
 ### Initialize Terraform
 ```
@@ -79,6 +79,13 @@ You can also ssh to the DNS record that was provisioned.
 
 ## Accessing Vault
 When Vault is initialized, the initial root token and the recovery key is stored in the `/etc/vault.d/vault_init_output` file. Additionally, the initial root token is saved as the VAULT_ROOT_TOKEN environment variable in the `/etc/vault.d/vaultrc` file. You can source this file in order to interact with Vault on the instance.
+
+```
+sudo su -
+. /etc/vault.d/vaultrc
+vault status
+VAULT_TOKEN=$VAULT_ROOT_TOKEN vault read sys/license
+```
 
 ## Troubleshooting
 The purpose of this configuration is to allow you to provision Vault Enterprise fully unattended. If something goes wrong, you can examine the following items to see what may have gone wrong.

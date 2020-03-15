@@ -97,9 +97,17 @@ do
   sleep 1
 done
 
-# install license
-curl \
-  --insecure \
-  --header "X-Vault-Token: $VAULT_ROOT_TOKEN" \
-  --request PUT \
-  --data "{\"text\": \"${vault_license}\"}" $VAULT_ADDR/v1/sys/license
+# install license if one has been defined
+if [ "${vault_license}" != "" ]
+then
+  echo "Installing Vault license."
+  curl \
+    --insecure \
+    --header "X-Vault-Token: $VAULT_ROOT_TOKEN" \
+    --request PUT \
+    --data "{\"text\": \"${vault_license}\"}" $VAULT_ADDR/v1/sys/license
+else
+  echo "No Vault license specified, continuing."
+fi
+
+echo "Finished running user data script."
