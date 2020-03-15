@@ -30,6 +30,9 @@ The `owner_ip` is your IP address. We allow full access from this IP address to 
 ### Remote State Storage
 The [Terraform settings](https://www.terraform.io/docs/configuration/terraform.html) cannot be parameterized via variables. In order to configure [remote state](https://www.terraform.io/docs/backends/types/terraform-enterprise.html), make a copy of [remote.tf.example](blob/remote.tf.example) and save it as `remote.tf` and define your Terraform Cloud organization and workspace.
 
+### HashiStack AMI
+This Terraform code builds upon a HashiStack Amazon Machine Image, which can be created using [ykhemani/packer-hashistack](https://github.com/ykhemani/packer-hashistack).
+
 ## Running this Terraform code
 There is a [tf.sh.example](blob/tf.sh.example) script that sets the aforementioned environment variables and the `owner_ip` and `vault_license` Terraform variables. The sensitive variables are set in our example by pulling the values from [LastPass](https://www.lastpass.com/) using the [LastPass CLI](https://github.com/lastpass/lastpass-cli). You can make a copy of this script and save it as `tf.sh`, and customize it to pull from your LastPass account or set these environment variables any way you like, but please don't store them in plain text and please do NOT check them into GitHub or other VCS provider, be it public or privately hosted.
 
