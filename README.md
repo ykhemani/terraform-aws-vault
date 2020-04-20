@@ -8,7 +8,7 @@ A DNS record is provisioned in [Cloudflare](https://www.cloudflare.com/), but th
 
 An [ACME](https://www.terraform.io/docs/providers/acme/r/certificate.html) PKI certificate is provisioned from [LetsEncrypt](https://letsencrypt.org/) using Cloudflare for the DNS challenge.
 
-State is stored in [Terraform Cloud](https://www.terraform.io/docs/cloud/). You can also run this Terraform code in Terraform Cloud.
+State is stored in [Terraform Cloud](https://www.terraform.io/docs/cloud/). You can also run this Terraform code in Terraform Cloud or Terraform Enterprise.
 
 Do NOT use this Terraform configuration in production. When Vault is initialized, the root token and recovery keys are stored on the filesystem. The purpose of this Terraform configuration is to make doing Vault demos easier.
 
